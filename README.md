@@ -1,24 +1,22 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## This example project is used to show a bug with Rails inflections.
 
-Things you may want to cover:
+Here's a simple Rails app with a single engine. The engine is named MyEngine but we want the snake case version to be just myengine. 
 
-* Ruby version
+I've set the following inflection rules which allow this to work in most cases.
 
-* System dependencies
+```
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.acronym 'MyEngine'
+  inflect.human 'myengine', 'MyEngine'
+end
+```
 
-* Configuration
+However, when running the install:migrations rake task, the inflection config is not loaded soon enough and I get an error "did you mean my_engine".
 
-* Database creation
+Here are the steps to reproduce: 
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+1. Clone the repo
+2. Try to install the migrations from the engine `rails myengine:install:migrations`
+3. Notice error message "did you mean my_engine"
